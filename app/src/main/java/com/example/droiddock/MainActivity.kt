@@ -100,10 +100,10 @@ fun MainScreen(modifier: Modifier = Modifier) {
                 text = currentTime,
                 fontFamily = OswaldFontFamily,
                 fontWeight = FontWeight.Normal,
-                fontSize = 190.sp,
+                fontSize = 220.sp,
                 modifier = Modifier
-                    .weight(0.65f)
-                    .padding(start = 90.dp)
+                    .weight(0.7f)
+                    .padding(start = 70.dp)
                     .align(Alignment.CenterVertically)
                     .graphicsLayer(
                         scaleY = 1.5f // Stretch text vertically by 1.5 times (you can adjust this value)
@@ -113,21 +113,21 @@ fun MainScreen(modifier: Modifier = Modifier) {
             // Date & Temperature
             Column(
                 modifier = Modifier
-                    .weight(0.35f)
+                    .weight(0.3f)
                     .align(Alignment.Top)
-                    .padding(top = 32.dp, start = 32.dp)
+                    .padding(top = 35.dp, start = 32.dp)
             ) {
                 Text(
                     text = currentDate,
                     fontFamily = OswaldFontFamily,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 40.sp
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 42.sp
                 )
                 Text(
-                    text = "50°C",
+                    text = "-15°C",
                     fontFamily = OswaldFontFamily,
                     fontWeight = FontWeight.Light,
-                    fontSize = 30.sp
+                    fontSize = 32.sp
                 )
             }
         }
