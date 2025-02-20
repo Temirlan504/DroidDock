@@ -1,5 +1,6 @@
 package com.example.droiddock
 
+import com.example.droiddock.ui.screens.MainScreen
 import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
@@ -8,33 +9,16 @@ import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.droiddock.viewmodel.MainViewModel
 import com.example.droiddock.ui.theme.DroidDockTheme
-import com.example.droiddock.ui.theme.OswaldFontFamily
-import kotlinx.coroutines.delay
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import com.example.droiddock.viewmodel.WeatherViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,84 +48,21 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             DroidDockTheme {
+                val viewModel: MainViewModel = viewModel()
+                val weatherViewModel: WeatherViewModel = viewModel()
+
+                LaunchedEffect(Unit) {
+                    weatherViewModel.fetchWeather("Mississauga") // Change city as needed
+                }
+
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainScreen(modifier = Modifier.padding(innerPadding))
+                    MainScreen(
+                        modifier = Modifier.padding(innerPadding),
+                        viewModel = viewModel,
+                        weatherViewModel = weatherViewModel
+                    )
                 }
             }
         }
     }
-}
-
-@Composable
-fun MainScreen(modifier: Modifier = Modifier) {
-    // State to hold the current time
-    var currentTime by remember { mutableStateOf(getCurrentTime()) }
-    var currentDate by remember { mutableStateOf(getCurrentDate()) }
-
-    // Update the time every second
-    LaunchedEffect(Unit) {
-        while (true) {
-            currentTime = getCurrentTime()
-            currentDate = getCurrentDate()
-            delay(1000) // Update every second
-        }
-    }
-
-    Box(
-        modifier = Modifier.fillMaxSize().padding(bottom = 25.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // Large Time Text
-            Text(
-                text = currentTime,
-                fontFamily = OswaldFontFamily,
-                fontWeight = FontWeight.Normal,
-                fontSize = 220.sp,
-                modifier = Modifier
-                    .weight(0.7f)
-                    .padding(start = 70.dp)
-                    .align(Alignment.CenterVertically)
-                    .graphicsLayer(
-                        scaleY = 1.5f // Stretch text vertically by 1.5 times (you can adjust this value)
-                    )
-            )
-
-            // Date & Temperature
-            Column(
-                modifier = Modifier
-                    .weight(0.3f)
-                    .align(Alignment.Top)
-                    .padding(top = 35.dp, start = 32.dp)
-            ) {
-                Text(
-                    text = currentDate,
-                    fontFamily = OswaldFontFamily,
-                    fontWeight = FontWeight.Normal,
-                    fontSize = 42.sp
-                )
-                Text(
-                    text = "-15°C",
-                    fontFamily = OswaldFontFamily,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 32.sp
-                )
-            }
-        }
-    }
-}
-
-// Function to get the current time
-fun getCurrentTime(): String {
-    val timeFormat = SimpleDateFormat("hh:mm", Locale.getDefault())
-    return timeFormat.format(Date())
-}
-
-// Function to get the current date
-fun getCurrentDate(): String {
-    val dateFormat = SimpleDateFormat("EEE dd", Locale.getDefault())
-    return dateFormat.format(Date())
 }

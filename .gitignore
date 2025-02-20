@@ -62,3 +62,6 @@ fabric/
 
 # Hilt
 .hilt/
+
+# Ignore local properties file (contains API keys)
+local.properties
