@@ -65,19 +65,23 @@ fun MainScreen(
 
                 // Display Weather
                 Row(verticalAlignment = Alignment.CenterVertically) {
+                    // Weather Icon and Text
+                    Image(
+                        painter = rememberAsyncImagePainter(weatherIconUrl),
+                        contentDescription = "Weather Icon",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .graphicsLayer(scaleX = 2.0f, scaleY = 2.0f), // Scale because image has internal padding
+                        contentScale = ContentScale.Fit
+                    )
+
+                    Spacer(modifier = Modifier.width(4.dp))
+
                     Text(
                         text = temperature,
                         fontFamily = OswaldFontFamily,
                         fontWeight = FontWeight.Light,
                         fontSize = 32.sp
-                    )
-
-                    // Weather Icon
-                    Image(
-                        painter = rememberAsyncImagePainter(weatherIconUrl),
-                        contentDescription = "Weather Icon",
-                        modifier = Modifier.size(50.dp),
-                        contentScale = ContentScale.Fit
                     )
 
                     // "Refresh" button
